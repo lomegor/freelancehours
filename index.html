@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <title>Freelance Hours</title>
+		<link href='http://fonts.googleapis.com/css?family=Puritan|Shanti|Oswald' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" /> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				function update($that) {
+					var name = $that.parent().parent().children().eq(0).text();
+					$.get('/jh/'+name,
+						{method:'get'},
+						function(hours) {
+							$that.parent().parent().children().eq(1).text(hours);
+						}
+					);
+				}
+				function start($that) {
+					var name = $that.parent().parent().children().eq(0).text();
+					console.log("start "+name);
+					$.get('/jh/'+name,
+						{method:'start'},
+						function() {
+							$that.removeClass('start');
+							$that.attr('value','stop');
+							$that.text('stop');
+							$that.unbind('click');
+							$that.click(function() {stop($(this));});
+						}
+					);
+				};
+				function stop($that) {
+					var name = $that.parent().parent().children().eq(0).text();
+					console.log("stop "+name);
+					$.get('/jh/'+name,
+						{method:'stop'},
+						function() {
+							$that.removeClass('stop');
+							$that.attr('value','start');
+							$that.text('start');
+							$that.unbind('click');
+							$that.click(function() {start($(this));});
+							update($that);
+						}
+					);
+				}
+				$(".starter").click(function() {start($(this));});
+				$(".stoper").click(function() {stop($(this));});
+				$(".incer").click(function() {
+					var $that = $(this);
+					var name = $that.parent().parent().children().eq(0).text();
+					console.log("incr "+name);
+					$.get('/jh/'+name,
+						{method:'increment'},
+						function() {update($that);}
+					);
+				});
+				$(".decrer").click(function() {
+					var $that = $(this);
+					var name = $that.parent().parent().children().eq(0).text();
+					console.log("decr "+name);
+					$.get('/jh/'+name,
+						{method:'decrement'},
+						function() {update($that);}
+					);
+				});
+				$(".deleter").click(function() {
+					var $that = $(this);
+					var name = $that.parent().parent().children().eq(0).text();
+					console.log("del "+name);
+					$.get('/jh/'+name,
+						{method:'delete'},
+						function() {$that.parent().parent().remove();}
+					);
+				});
+			});
+		</script>
+  </head>
+  <body>
+    <div id="contenido">
+				<form action="/insert" method="post">
+						<input type="text" name="name" />
+						<input type="submit" value="Add Job!" />
+				</form>
+        <table>
+					{% for jh in hours %}        
+          <tr>
+						<td>{{ jh.name }}</td>
+						<td>{{ jh.hours }}</td>
+						<td><button class="{{ jh.started }}er" value="{{jh.started}}">{{jh.started}}</button></td>
+						<td><button class="incer" value="+">+</button></td>
+						<td><button class="decrer" value="-">-</button></td>
+						<td><button class="deleter" value="delete">X</button></td>
+          </tr>
+					{% endfor %}
+      </table>
+    </div>
+  </body>
+</html>

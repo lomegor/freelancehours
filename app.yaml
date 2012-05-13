@@ -1,0 +1,18 @@
+application: freelancehours
+version: 2
+runtime: python
+api_version: 1
+
+handlers:
+- url: /styles
+  static_dir: styles
+  login: admin
+  
+- url: /images
+  static_dir: images
+  login: admin
+  
+- url: /.*
+  script: freelancehours.py
+  login: admin
+  secure: always

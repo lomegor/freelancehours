@@ -1,0 +1,38 @@
+body {
+  font-family: Verdana, Helvetica, sans-serif;
+  /*background-color: #DDDDDD;*/
+  /*background: #DDDDDD url('../images/WhiteBird.jpg') no-repeat center;*/
+  width:100%;
+	font-family:Shanti;
+}
+a, a:visited , a:link, a:active {
+  font-style:none;
+  text-decoration:none;
+  color:inherit;
+}
+#contenido {	
+  margin-left: 20%;
+	margin-right: 20%;
+	font-size:20px;
+}
+#contenido table {
+	border-collapse:collapse;
+}
+#contenido tr:hover {
+	background-color:lightgrey;
+}
+#contenido td {
+	border:1px solid black;
+	height:20px;
+	width:100px;
+	line-height:20px;
+	text-align:center;
+}
+#contenido button {
+	border-radius:10px;
+	opacity:0.5;
+	cursor:pointer;
+}
+#contenido button:hover {
+	opacity:1;
+}
