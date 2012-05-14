@@ -1,9 +1,7 @@
 body {
-  font-family: Verdana, Helvetica, sans-serif;
-  /*background-color: #DDDDDD;*/
-  /*background: #DDDDDD url('../images/WhiteBird.jpg') no-repeat center;*/
+  font-family: Shanti, Verdana, Helvetica, sans-serif;
+  background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 18%, rgb(209,213,255) 96%);
   width:100%;
-	font-family:Shanti;
 }
 a, a:visited , a:link, a:active {
   font-style:none;
@@ -15,24 +13,87 @@ a, a:visited , a:link, a:active {
 	margin-right: 20%;
 	font-size:20px;
 }
-#contenido table {
-	border-collapse:collapse;
-}
-#contenido tr:hover {
-	background-color:lightgrey;
-}
-#contenido td {
-	border:1px solid black;
-	height:20px;
-	width:100px;
-	line-height:20px;
+#contenido #header {
+	margin-top:20px;
+	padding:10px;
+	border: 1px solid #A5A9C4;
+	background-color:#7B7CAB;
+	border-radius:20px;
+	font-size:18px;
 	text-align:center;
 }
-#contenido button {
-	border-radius:10px;
-	opacity:0.5;
-	cursor:pointer;
+	#header * {
+		padding:5px;
+		border-radius:10px;
+		font-size:inherit;
+	}
+	#header select, #header option {
+		text-align:center;
+	}
+#contenido table {
+	width:780px;
+	margin-left:20px;
+	margin-right:20px;
+	margin-top:-2px;
+	border-collapse:collapse;
+	border: 2px solid #B8B8B8;
+	border-bottom-left-radius:10px;
+	border-bottom-right-radius:10px;
 }
-#contenido button:hover {
-	opacity:1;
-}
+	#contenido table tr:last-child td:first-child {
+		border-bottom-left-radius:10px;
+	}
+	#contenido table tr:last-child td:last-child {
+		border-bottom-right-radius:10px;
+	}
+
+	#contenido table tr {
+		border-radius:10px;
+		border-bottom
+	}
+	#contenido table tr:hover {
+		background-color:lightgrey;
+	}
+	#contenido table td {
+		line-height:20px;
+		text-align:center;
+	}
+
+	#contenido table .changer {
+		font-size:17px;
+		font-weight:bold;
+		border-radius:10px;
+		padding-left:30px;
+		padding-right:30px;
+		padding-top:5px;
+		padding-bottom:5px;
+		cursor:pointer;
+	}
+	#contenido table .starter {
+		background: -webkit-linear-gradient(top, #cdeb8e 0%,#a5c956 100%); 
+	}
+	#contenido table .stoper {
+		background: -webkit-linear-gradient(top, #f2825b 0%,#e55b2b 50%,#f07146 100%);
+	}
+	#contenido table .deleter {
+		font-size:12px;
+		font-weight:bold;
+		border-radius:10px;
+		opacity:0.7;
+		cursor:pointer;
+		background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%);
+	}
+		#contenido table .deleter:hover {
+			opacity:1;
+		}
+	
+	#contenido table .project, #contenido table .descr {
+		opacity:0.9;
+		font-size:12px;
+	}
+	#contenido table .name {
+		font-weight:bold;
+		font-size:18px;
+	}
+	#contenido table .hour {
+	}
