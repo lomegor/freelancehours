@@ -7,6 +7,10 @@ handlers:
 - url: /styles
   static_dir: styles
   login: admin
+
+- url: /scripts
+  static_dir: scripts
+  login: admin
   
 - url: /images
   static_dir: images

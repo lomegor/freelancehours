@@ -1,7 +1,14 @@
+html {
+	height:100%;
+}
 body {
   font-family: Shanti, Verdana, Helvetica, sans-serif;
   background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 18%, rgb(209,213,255) 96%);
   width:100%;
+	height: 100%;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 a, a:visited , a:link, a:active {
   font-style:none;
@@ -20,18 +27,28 @@ a, a:visited , a:link, a:active {
 	background-color:#7B7CAB;
 	border-radius:20px;
 	font-size:18px;
-	text-align:center;
 }
 	#header * {
-		padding:5px;
 		border-radius:10px;
 		font-size:inherit;
+		width:200px;
 	}
-	#header select, #header option {
+	#header select, #header input {
+		padding:5px;
+	}
+	#header table {
+		width:840px;
+	}
+	#header #error {
+		width:400px;
 		text-align:center;
+		margin-left:auto;
+		margin-right:auto;
+		color:red;
+		background-color:
 	}
-#contenido table {
-	width:780px;
+#contenido #tasks {
+	width:770px;
 	margin-left:20px;
 	margin-right:20px;
 	margin-top:-2px;
@@ -40,42 +57,42 @@ a, a:visited , a:link, a:active {
 	border-bottom-left-radius:10px;
 	border-bottom-right-radius:10px;
 }
-	#contenido table tr:last-child td:first-child {
+	#contenido #tasks tr:last-child td:first-child {
 		border-bottom-left-radius:10px;
 	}
-	#contenido table tr:last-child td:last-child {
+	#contenido #tasks tr:last-child td:last-child {
 		border-bottom-right-radius:10px;
 	}
 
-	#contenido table tr {
+	#contenido #tasks tr {
 		border-radius:10px;
 		border-bottom
 	}
-	#contenido table tr:hover {
+	#contenido #tasks tr:hover {
 		background-color:lightgrey;
 	}
-	#contenido table td {
+	#contenido #tasks td {
 		line-height:20px;
 		text-align:center;
 	}
 
-	#contenido table .changer {
+	#contenido #tasks .changer {
 		font-size:17px;
 		font-weight:bold;
 		border-radius:10px;
-		padding-left:30px;
-		padding-right:30px;
 		padding-top:5px;
 		padding-bottom:5px;
 		cursor:pointer;
+		width:90px;
+		text-align:center
 	}
-	#contenido table .starter {
+	#contenido #tasks .starter {
 		background: -webkit-linear-gradient(top, #cdeb8e 0%,#a5c956 100%); 
 	}
-	#contenido table .stoper {
+	#contenido #tasks .stoper {
 		background: -webkit-linear-gradient(top, #f2825b 0%,#e55b2b 50%,#f07146 100%);
 	}
-	#contenido table .deleter {
+	#contenido #tasks .deleter {
 		font-size:12px;
 		font-weight:bold;
 		border-radius:10px;
@@ -83,17 +100,23 @@ a, a:visited , a:link, a:active {
 		cursor:pointer;
 		background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%);
 	}
-		#contenido table .deleter:hover {
+		#contenido #tasks .deleter:hover {
 			opacity:1;
 		}
 	
-	#contenido table .project, #contenido table .descr {
+	#contenido #tasks .project, #contenido #tasks .descr {
 		opacity:0.9;
 		font-size:12px;
 	}
-	#contenido table .name {
+	#contenido #tasks .name {
 		font-weight:bold;
 		font-size:18px;
 	}
-	#contenido table .hour {
+	#contenido #tasks .hour {
+	}
+	#contenido #tasks tr td {
+		width: 100px;
+	}
+	#contenido #tasks tr td:first-child {
+		width: 293px;
 	}
