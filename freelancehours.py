@@ -17,16 +17,26 @@ class MainPage(webapp.RequestHandler):
     def get(self):
         dataHours = []
         projects = []
+        dailyHours = []
 
         cs = Counter.all()
         for c in cs:
             jh = JobHours.all().filter('name =',c.name).get()
             td = datetime.datetime.now()-c.start
-            tmp = datetime.datetime.combine(datetime.date.today(), jh.hours) + td
-            tmp = tmp.time()
+            tmp = jh.hours + td
 
             jh.hours = tmp.replace(microsecond = 0)
             jh.put()
+
+            d = DailyHours.all().filter('day =',datetime.date.today())\
+                .filter('project =',jh.project.key()).get();
+            if not d:
+                d = DailyHours(project = jh.project.key(), day = datetime.date.today())
+                tmp = datetime.datetime.min + td
+            else:
+                tmp = d.hours + td
+            d.hours = tmp.replace(microsecond = 0)
+            d.put()
 
             c.start = datetime.datetime.now()
             c.put()
@@ -37,9 +47,20 @@ class MainPage(webapp.RequestHandler):
         for p in Projects.all():
             projects.append(p.name)
 
+        td = datetime.timedelta()
+        for d in DailyHours.all():
+            td += (d.hours - datetime.datetime.min)
+            dailyHours.append(DataDailyHours(d))
+
+        total = DataDailyHours()
+        total.hours = datetime.datetime.min + td
+        total = getHours(total)
+
         template_values = {
             'projects':projects,
-            'hours':dataHours
+            'hours':dataHours,
+            'daily':dailyHours,
+            'total':total
         }
 
         path = os.path.join(os.path.dirname(__file__), 'index.html')
@@ -49,6 +70,19 @@ class Counter(db.Model):
     name = db.StringProperty()
     start = db.DateTimeProperty(auto_now=True)
 
+class DataDailyHours():
+    project = ''
+    day = ''
+    hours = ''
+    today = ''
+    def __init__(self,dh=None):
+        if dh:
+            self.project = dh.project.name
+            self.day = dh.day.isoformat()
+            if dh.day == datetime.date.today():
+                self.today = 'today'
+            self.hours = getHours(dh)
+
 class DataJobHours():
     name = ''
     hours = 0
@@ -57,7 +91,7 @@ class DataJobHours():
     started = ''
     def __init__(self,jh):
         self.name = jh.name
-        self.hours = jh.hours.isoformat()
+        self.hours = getHours(jh)
         self.descr = jh.descr
         self.project = jh.project.name
         if jh.started==1:
@@ -70,7 +104,7 @@ class Projects(db.Model):
 
 class JobHours(db.Model):
     name = db.StringProperty()
-    hours = db.TimeProperty()
+    hours = db.DateTimeProperty()
     descr = db.StringProperty()
     project = db.ReferenceProperty(Projects)
     started = db.IntegerProperty()
@@ -90,7 +124,9 @@ class API(webapp.RequestHandler):
             jh = pj.jobhours_set.filter('name =',n).get()
             if not jh:
                 descr = self.request.get('descr')
-                jh = JobHours(name = n, hours = datetime.time(), descr = descr, project = pj.key())
+                jh = JobHours(name = n,\
+                    hours = datetime.datetime.min,\
+                    descr = descr, project = pj.key())
                 jh.put()
                 new = True
 
@@ -123,24 +159,56 @@ class API(webapp.RequestHandler):
                     jh = JobHours.all().filter('name =',n).get()
                     jh.started=0
                     td = datetime.datetime.now()-c.start
-                    tmp = datetime.datetime.combine(datetime.date.today(), jh.hours) + td
-                    tmp = tmp.time()
+                    tmp = jh.hours + td
+
                     jh.hours = tmp.replace(microsecond = 0)
                     jh.put()
+
+                    d = DailyHours.all().filter('day =',datetime.date.today())\
+                        .filter('project =',jh.project.key()).get();
+                    if not d:
+                        d = DailyHours(project = jh.project.key(), day = datetime.date.today())
+                        tmp = datetime.datetime.min + td
+                    else:
+                        tmp = d.hours + td
+                    d.hours = tmp.replace(microsecond = 0)
+                    d.put()
+
                     c = Counter.all().filter('name =',n)
                     for c1 in c:
                         db.delete(c1.key())
-                    Respond(self,0,jh.hours.isoformat())
+                    Respond(self,0,getHours(jh))
             elif new:
-                Respond(self,0,jh.hours.isoformat())
+                Respond(self,0,getHours(jh))
             else:
                 Respond(self,1,"Task already exists!");
         except:
             Respond(self,1,"Unexpected error!")
             logging.exception("Error")
 
+class DailyHours(db.Model):
+    project = db.ReferenceProperty(Projects)
+    day = db.DateProperty()
+    hours = db.DateTimeProperty()
+
 def Respond(req, error, msg):
     req.response.out.write("{\"error\":"+str(error)+",\"data\":\""+str(msg)+"\"}")
+
+def getHours(o):
+    td = o.hours - datetime.datetime.min
+    td = (td.microseconds + (td.seconds + td.days * 24 * 3600)\
+        * 10**6) / 10**6
+    h = int(td/3600)
+    td = td - (h*3600)
+    m = int(td/60)
+    s = td - (m*60)
+    if h<10:
+        h="0"+str(h)
+    if m<10:
+        m="0"+str(m)
+    if s<10:
+        s="0"+str(s)
+    return str(h)+":"+str(m)+":"+str(s)
 
 application = webapp.WSGIApplication([(r'^/$', MainPage),
                                       (r'/(.*)/(.*)', API)],

@@ -120,3 +120,25 @@ a, a:visited , a:link, a:active {
 	#contenido #tasks tr td:first-child {
 		width: 293px;
 	}
+
+#dailyhours {
+	position:fixed;
+	top:50px;
+	left:10px;
+	border-radius:10px;
+	border: 1px solid #B8B8B8;
+	width:200px;
+	background-color:rgb(209,163,255);
+	padding:10px;
+	text-align:center;
+}
+	#dailyhours table {
+		width:100%;
+	}
+	#dailyhours td {
+		font-size:14px;
+		text-align:center;
+	}
+	#dailyhours .today {
+		font-size:20px;
+	}

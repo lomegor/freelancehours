@@ -15,34 +15,54 @@ $(document).ready(function() {
 		}
 		counter[p][n] = 1;
 		setTimeout(function(){count(h,p,n)},1000);
+		counting = 1;
 	});
+	totalCounter = $("#dailyhours .total");
+	todayCounter = $("#dailyhours .today");
+	setTimeout(countDay,1000);
 });
+
+var totalCounter;
+var todayCounter;
+var counting = 0;
 
 var newProject = 0;
 
 var counter = {};
 
+function updateTime(e) {
+	var matches = /(\d+):(\d\d):(\d\d)/.exec(e.text())
+	var h = parseInt(matches[1],10);
+	var m = parseInt(matches[2],10);
+	var s = parseInt(matches[3],10);
+	if (s == 59) {
+		s = 0;
+		if (m == 59) {
+			m = 0;
+			h+=1;
+		} else {
+			m+=1;
+		}
+	} else {
+		s+=1;
+	}
+	h<10 && (h="0"+h);
+	m<10 && (m="0"+m);
+	s<10 && (s="0"+s);
+	e.text(h+":"+m+":"+s);
+}
+
+function countDay() {
+	if (counting) {
+		updateTime(totalCounter);
+		updateTime(todayCounter);
+	}
+	setTimeout(countDay,1000);
+}
+
 function count(e,p,n) {
 	if (counter[p] && counter[p][n] && counter[p][n]==1) {
-		var matches = /(\d\d):(\d\d):(\d\d)/.exec(e.text())
-		var h = parseInt(matches[1],10);
-		var m = parseInt(matches[2],10);
-		var s = parseInt(matches[3],10);
-		if (s == 59) {
-			s = 0;
-			if (m == 59) {
-				m = 0;
-				h+=1;
-			} else {
-				m+=1;
-			}
-		} else {
-			s+=1;
-		}
-		h<10 && (h="0"+h);
-		m<10 && (m="0"+m);
-		s<10 && (s="0"+s);
-		e.text(h+":"+m+":"+s);
+		updateTime(e);
 		setTimeout(function(){count(e,p,n)},1000);
 	} else if (counter[p] && counter[p][n]) {
 		delete counter[p][n];
@@ -70,6 +90,7 @@ function start() {
 				$that.text("Start");
 				return;
 			}
+			counting = 1;
 		});
 	if (!counter[p]) {
 		counter[p] = {};
@@ -99,6 +120,7 @@ function stop() {
 				return;
 			}
 			h.text(data.data);
+			counting = 0;
 		});
 	if (counter[p] && counter[p][n]) {
 		counter[p][n] = 0;

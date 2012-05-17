@@ -60,6 +60,17 @@
           </tr>
 					{% endfor %}
       </table>
+      <div id="dailyhours">
+				<span class="total">{{ total }}</span>
+				<hr>
+				<table>
+				{% for dh in daily %}
+					<tr>
+						<td class="day">{{ dh.day}}</td><td class='{{ dh.today }}'>{{ dh.hours }}</td>
+					</tr>
+				{% endfor %}
+				</table>
+      </div>
     </div>
   </body>
 </html>
