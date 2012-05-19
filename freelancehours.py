@@ -17,7 +17,7 @@ class MainPage(webapp.RequestHandler):
     def get(self):
         dataHours = []
         projects = []
-        dailyHours = []
+        dailyHours = dict()
 
         cs = Counter.all()
         for c in cs:
@@ -41,26 +41,29 @@ class MainPage(webapp.RequestHandler):
             c.start = datetime.datetime.now()
             c.put()
 
-        for j in JobHours.all():
-            dataHours.append(DataJobHours(j))
-
         for p in Projects.all():
+            dailyHours[p.name] = dict(total=datetime.datetime.min, hours=[])
             projects.append(p.name)
 
-        td = datetime.timedelta()
-        for d in DailyHours.all():
-            td += (d.hours - datetime.datetime.min)
-            dailyHours.append(DataDailyHours(d))
+        for j in JobHours.all():
+            dataHours.append(DataJobHours(j))
+            tmp = j.hours - datetime.datetime.min
+            dailyHours[j.project.name]['total'] += tmp
 
-        total = DataDailyHours()
-        total.hours = datetime.datetime.min + td
-        total = getHours(total)
+        for d in DailyHours.all():
+            dailyHours[d.project.name]['hours'].append(DataDailyHours(d))
+
+        hoursArray = []
+        for k,v in dailyHours.iteritems():
+            total = DataDailyHours()
+            total.hours = v['total']
+            v['total'] = getHours(total)
+            hoursArray.append([k,v['total'],v['hours']])
 
         template_values = {
             'projects':projects,
             'hours':dataHours,
-            'daily':dailyHours,
-            'total':total
+            'daily':hoursArray,
         }
 
         path = os.path.join(os.path.dirname(__file__), 'index.html')
