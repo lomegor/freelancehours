@@ -21,6 +21,7 @@ import datetime
 import urllib
 import webapp2
 
+from google.appengine.api import users
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 
@@ -84,6 +85,8 @@ class MainPage(webapp2.RequestHandler):
             'projects':projects,
             'hours':dataHours,
             'daily':hoursArray,
+            'current_user': users.get_current_user(),
+            'logout_url': users.create_logout_url('/')
             }
         path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates', 'index.html')
         self.response.out.write(template.render(path, template_values))
