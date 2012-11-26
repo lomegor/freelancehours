@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2012 Sebastian Ventura
 # This file is part of freelancehours.
 #
@@ -15,20 +16,23 @@
 # along with freelancehours.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import cgi
 import os
 import datetime
 import urllib
-import sys
+import webapp2
 
-
-from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 
-class MainPage(webapp.RequestHandler):
+from models import Counter
+from models import DailyHours
+from models import DataJobHours
+from models import DataDailyHours
+from models import getHours
+from models import Projects
+from models import JobHours
+
+class MainPage(webapp2.RequestHandler):
 
     def get(self):
         dataHours = []
@@ -45,7 +49,7 @@ class MainPage(webapp.RequestHandler):
             jh.put()
 
             d = DailyHours.all().filter('day =',datetime.date.today())\
-                .filter('project =',jh.project.key()).get();
+            .filter('project =',jh.project.key()).get();
             if not d:
                 d = DailyHours(project = jh.project.key(), day = datetime.date.today())
                 tmp = datetime.datetime.min + td
@@ -80,55 +84,11 @@ class MainPage(webapp.RequestHandler):
             'projects':projects,
             'hours':dataHours,
             'daily':hoursArray,
-        }
-
-        path = os.path.join(os.path.dirname(__file__), 'index.html')
+            }
+        path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates', 'index.html')
         self.response.out.write(template.render(path, template_values))
 
-class Counter(db.Model):
-    name = db.StringProperty()
-    start = db.DateTimeProperty(auto_now=True)
-
-class DataDailyHours():
-    project = ''
-    day = ''
-    hours = ''
-    today = ''
-    def __init__(self,dh=None):
-        if dh:
-            self.project = dh.project.name
-            self.day = dh.day.isoformat()
-            if dh.day == datetime.date.today():
-                self.today = 'today'
-            self.hours = getHours(dh)
-
-class DataJobHours():
-    name = ''
-    hours = 0
-    descr = ''
-    project = ''
-    started = ''
-    def __init__(self,jh):
-        self.name = jh.name
-        self.hours = getHours(jh)
-        self.descr = jh.descr
-        self.project = jh.project.name
-        if jh.started==1:
-            self.started='stop'
-        else:
-            self.started='start'
-
-class Projects(db.Model):
-    name = db.StringProperty()
-
-class JobHours(db.Model):
-    name = db.StringProperty()
-    hours = db.DateTimeProperty()
-    descr = db.StringProperty()
-    project = db.ReferenceProperty(Projects)
-    started = db.IntegerProperty()
-
-class API(webapp.RequestHandler):
+class API(webapp2.RequestHandler):
     def get(self,p='',n=''):
         try:
             p = urllib.unquote(p)
@@ -184,7 +144,7 @@ class API(webapp.RequestHandler):
                     jh.put()
 
                     d = DailyHours.all().filter('day =',datetime.date.today())\
-                        .filter('project =',jh.project.key()).get();
+                    .filter('project =',jh.project.key()).get();
                     if not d:
                         d = DailyHours(project = jh.project.key(), day = datetime.date.today())
                         tmp = datetime.datetime.min + td
@@ -205,36 +165,6 @@ class API(webapp.RequestHandler):
             Respond(self,1,"Unexpected error!")
             logging.exception("Error")
 
-class DailyHours(db.Model):
-    project = db.ReferenceProperty(Projects)
-    day = db.DateProperty()
-    hours = db.DateTimeProperty()
 
 def Respond(req, error, msg):
     req.response.out.write("{\"error\":"+str(error)+",\"data\":\""+str(msg)+"\"}")
-
-def getHours(o):
-    td = o.hours - datetime.datetime.min
-    td = (td.microseconds + (td.seconds + td.days * 24 * 3600)\
-        * 10**6) / 10**6
-    h = int(td/3600)
-    td = td - (h*3600)
-    m = int(td/60)
-    s = td - (m*60)
-    if h<10:
-        h="0"+str(h)
-    if m<10:
-        m="0"+str(m)
-    if s<10:
-        s="0"+str(s)
-    return str(h)+":"+str(m)+":"+str(s)
-
-application = webapp.WSGIApplication([(r'^/$', MainPage),
-                                      (r'/(.*)/(.*)', API)],
-                                     debug=True)
-
-def main():
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()
