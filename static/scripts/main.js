@@ -1093,7 +1093,7 @@
 
 $(document).ready(function() {
     $("#project").change(changeIfNew);
-    $("#header form").submit(newTask);
+    $("#task-form-section form").submit(newTask);
     $(document).on("click", ".starter", start);
     $(document).on("click", ".stoper", stop);
     $(document).on("click", ".deleter", remove);
@@ -1279,15 +1279,27 @@ function newTask(evt) {
             $("#project").show();
             newProject = 0;
         }
-        $("#tasks").append($("<tr>" + '<td><button class="changer starter" value="start">Start</button></td>' + '<td class="name">' + n + "</td>" + '<td class="project">' + p + "</td>" + '<td class="descr">' + d + "</td>" + '<td class="hour">' + data.data + "</td>" + '<td><button class="deleter" value="delete">X</button></td>' + "</tr>")).find(".starter").click();
+        $("#tasks").append($("<tr>" + '<td><button class="btn changer starter" value="start">Start</button></td>' + '<td class="name">' + n + "</td>" + '<td class="project">' + p + "</td>" + '<td class="descr">' + d + "</td>" + '<td class="hour">' + data.data + "</td>" + '<td><button class="btn deleter" value="delete">Delete</button></td>' + "</tr>")).find(".starter").click();
     });
     return false;
 }
 
 function error(string) {
+    $("#error").css({
+        visibility: "visible"
+    });
+    $("#error").css({
+        display: "block"
+    });
     $("#error").text(string);
     setTimeout(function() {
         $("#error").text("");
+        $("#error").css({
+            visibility: "hidden"
+        });
+        $("#error").css({
+            display: "none"
+        });
     }, 5e3);
 }
 

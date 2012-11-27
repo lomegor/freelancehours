@@ -19,6 +19,7 @@ assets-compile:
 assets-compress:
 	${LESSC} --compress assets/less/main.less > static/styles/main.css
 	${LESSC} --compress assets/less/main-responsive.less > static/styles/main-responsive.css
+	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js > static/scripts/main.js
 
 watch-assets:
 	echo "Watching less files..."; \

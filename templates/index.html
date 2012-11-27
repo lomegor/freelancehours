@@ -71,43 +71,41 @@
         </div><!-- /. sidebar -->
 
         <!-- content -->
-        <div id="contenido" class="span9">
+        <div id="content" class="span9">
 
-            <div class="row-fluid span4">
-                <div id="header">
-                    <form>
-                        <table class="table">
-                            <tr>
-                                <th>Project</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select id="project">
-                                        {% for p in projects %}
-                                        <option value="{{ p }}">{{ p }}</option>
-                                        {% endfor %}
-                                        <option value="all" selected>All</option>
-                                        <option value="new">New</option>
-                                    </select>
-                                    <input id="newproject" style="display:none" type="text" name="project">
-                                </td>
-                                <td>
-                                    <input id="newtask" type="text" name="name">
-                                </td>
-                                <td>
-                                    <input id="newdescr" type="text" name="name">
-                                </td>
-                            </tr>
-                        </table>
-                        <input type="submit" style="visibility:hidden;height:0px;">
-                    </form>
-                    <div id="error"></div>
-                </div>
+            <div id="task-form-section" class="row-fluid">
+                <form id="task-form">
+                    <table class="table">
+                        <tr>
+                            <th>Project</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="project">
+                                    {% for p in projects %}
+                                    <option value="{{ p }}">{{ p }}</option>
+                                    {% endfor %}
+                                    <option value="all" selected>All</option>
+                                    <option value="new">New</option>
+                                </select>
+                                <input id="newproject" style="display:none" type="text" name="project">
+                            </td>
+                            <td>
+                                <input id="newtask" type="text" name="name">
+                            </td>
+                            <td>
+                                <input id="newdescr" type="text" name="name">
+                            </td>
+                        </tr>
+                    </table>
+                    <button class="btn" type="submit">Save</button>
+                </form>
+                <div id="error"></div>
             </div>
 
-            <div class="row-fluid">
+            <div id="task-list-section" class="row-fluid">
                 <table id="tasks" class="table table-bordered table-striped">
                     <tr>
                         <th style="width: 10%;">&nbsp;</th>
@@ -120,14 +118,14 @@
                     {% for jh in hours %}
                     <tr>
                         <td>
-                            <button class="btn btn-warning changer {{ jh.started }}er" type="button">{{jh.started}}</button>
+                            <button class="changer {{ jh.started }}er" type="button">{{jh.started}}</button>
                         </td>
                         <td class="name">{{ jh.name }}</td>
                         <td class="project">{{ jh.project }}</td>
                         <td class="descr">{{ jh.descr }}</td>
                         <td class="hour">{{ jh.hours }}</td>
                         <td>
-                            <button class="btn btn-danger deleter" type="button">Delete</button>
+                            <button class="deleter" type="button">Delete</button>
                         </td>
                     </tr>
                     {% endfor %}

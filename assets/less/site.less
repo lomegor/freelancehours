@@ -14,94 +14,6 @@
 * along with freelancehours.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-html {
-
-  padding-top: 60px;
-
-  body {
-  }
-
-
-  #contenido #tasks .project, #contenido #tasks .descr {
-  }
-
-  #contenido {
-
-    #tasks {
-
-      tr:last-child {
-        td:first-child {
-          border-bottom-left-radius: 10px;
-        }
-        td:last-child {
-          border-bottom-right-radius: 10px;
-        }
-      }
-      tr:hover {
-        background-color: lightgrey;
-      }
-      .name {
-        font-weight: bold;
-        font-size: 18px;
-      }
-      td {
-        line-height: 20px;
-        text-align: center;
-      }
-      .deleter:hover {
-        opacity: 1;
-      }
-      .deleter {
-      }
-      tr {
-        border-radius: 10px;
-        border-bottom: 10px;
-        td:first-child {
-          width: 293px;
-        }
-        td {
-          width: 100px;
-        }
-      }
-      .starter {
-        .btn-success;
-      }
-      .stoper {
-        .btn-warning;
-      }
-      .changer {
-      }
-    }
-    #header {
-    }
-  }
-
-  #header select, #header input {
-  }
-
-  a, a:visited, a:link, a:active {
-  }
-}
-
-#dailyhours {
-  .drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.2));
-  .rounded-bottom-corners(4px);
-  border-radius: 10px;
-  border: 1px solid #B8B8B8;
-  padding: 10px;
-  text-align: center;
-  td {
-    font-size: 14px;
-    text-align: center;
-  }
-  table {
-    width: 100%;
-  }
-  .today {
-    font-size: 20px;
-  }
-}
-
 .drop-shadow(@params) {
   -moz-box-shadow: @params;
   -webkit-box-shadow: @params;
@@ -117,15 +29,81 @@ html {
   border-bottom-left-radius: @params;
 }
 
-#header {
-  table {
+html {
+
+  padding-top: 60px;
+
+  #content {
+
+    #tasks {
+
+      .name {
+        font-weight: bold;
+        font-size: 18px;
+      }
+      td {
+        text-align: center;
+      }
+      .starter {
+        .btn;
+        .btn-success;
+      }
+      .stoper {
+        .btn;
+        .btn-warning;
+      }
+      .changer {
+      }
+      .deleter:hover {
+        opacity: 1;
+      }
+      .deleter {
+        .btn;
+        .btn-warning;
+      }
+    }
   }
-  #error {
-    width: 400px;
+}
+
+#dailyhours {
+  .drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.3));
+  .rounded-bottom-corners(4px);
+
+  padding: 10px;
+  text-align: center;
+  td {
+    font-size: 14px;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    color: red;
-    background-color: #ff0000;
   }
+  table {
+    width: 100%;
+  }
+  .today {
+    font-size: 20px;
+  }
+}
+
+#task-form-section {
+
+  form#task-form {
+    .drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.2));
+    .rounded-bottom-corners(4px);
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  #error {
+    .alert;
+    .alert-error;
+    visibility: hidden;
+    display: none;
+  }
+}
+
+#task-list-section {
+  table#tasks {
+    .drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.2));
+    .rounded-bottom-corners(4px);
+  }
+
 }

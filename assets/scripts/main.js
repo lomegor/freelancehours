@@ -18,7 +18,7 @@
 
 $(document).ready(function() {
 	$("#project").change(changeIfNew);
-	$("#header form").submit(newTask);
+	$("#task-form-section form").submit(newTask);
 	$(document).on('click','.starter',start);
 	$(document).on('click','.stoper',stop);
 	$(document).on('click','.deleter',remove);
@@ -49,7 +49,7 @@ var newProject = 0;
 var counter = {};
 
 function updateTime(e) {
-	var matches = /(\d+):(\d\d):(\d\d)/.exec(e.text())
+	var matches = /(\d+):(\d\d):(\d\d)/.exec(e.text());
 	var h = parseInt(matches[1],10);
 	var m = parseInt(matches[2],10);
 	var s = parseInt(matches[3],10);
@@ -201,12 +201,12 @@ function newTask(evt) {
 				newProject = 0;
 			}
 			$("#tasks").append($("<tr>"+
-					"<td><button class=\"changer starter\" value=\"start\">Start</button></td>"+
+					"<td><button class=\"btn changer starter\" value=\"start\">Start</button></td>"+
 					"<td class=\"name\">"+n+"</td>"+
 					"<td class=\"project\">"+p+"</td>"+
 					"<td class=\"descr\">"+d+"</td>"+
 					"<td class=\"hour\">"+data.data+"</td>"+
-					"<td><button class=\"deleter\" value=\"delete\">X</button></td>"+
+					"<td><button class=\"btn deleter\" value=\"delete\">Delete</button></td>"+
 				"</tr>")).find('.starter').click();
 		}
 	);
@@ -214,6 +214,12 @@ function newTask(evt) {
 };
 
 function error(string) {
+    $("#error").css({visibility: 'visible'});
+    $("#error").css({display: 'block'});
 	$("#error").text(string);
-	setTimeout(function() {$("#error").text("")},5000);
+	setTimeout(function() {
+        $("#error").text("");
+        $("#error").css({visibility: 'hidden'});
+        $("#error").css({display: 'none'});
+    }, 5000);
 };
