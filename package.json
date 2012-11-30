@@ -1,15 +1,7 @@
 {
     "name":"freelancehours",
     "version":"0.0.0",
-    "description":"freelancehours - My personal hour tracker",
-    "main":"index.js",
-    "scripts":{
-        "test":"echo \"Error: no test specified\" && exit 1"
-    },
-    "repository":{
-        "type":"git",
-        "url":"https://github.com/zemanel/freelancehours.git"
-    },
+    "description":"NPM dependencies for freelancehours",
     "dependencies":{
         "less":"*",
         "uglify-js":"*"
@@ -17,7 +9,7 @@
     "engines": {
         "node": ">=0.6"
     },
-    "author":"",
-    "license":"BSD",
+    "author":"José Moreira",
+    "license":"GPLv3",
     "readmeFilename":"README.md"
 }
