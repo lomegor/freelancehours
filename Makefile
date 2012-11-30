@@ -11,19 +11,17 @@ BOOTSTRAP_FILES=vendor/bootstrap/js/bootstrap-transition.js vendor/bootstrap/js/
  vendor/bootstrap/js/bootstrap-popover.js vendor/bootstrap/js/bootstrap-scrollspy.js \
  vendor/bootstrap/js/bootstrap-tab.js vendor/bootstrap/js/bootstrap-typeahead.js vendor/bootstrap/js/bootstrap-affix.js
 
+# Compile assets for development
 assets-compile:
 	${LESSC} assets/less/main.less > static/styles/main.css
 	${LESSC} assets/less/main-responsive.less > static/styles/main-responsive.css
 	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js -b > static/scripts/main.js
 
+# Compile and compresss assets for deployment
 assets-compress:
 	${LESSC} --compress assets/less/main.less > static/styles/main.css
 	${LESSC} --compress assets/less/main-responsive.less > static/styles/main-responsive.css
 	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js > static/scripts/main.js
-
-watch-assets:
-	echo "Watching less files..."; \
-	${WATCHR} -e "watch('src/less/.*\.less') { system 'make assets' }"
 
 deploy: assets-compress
 	appcfg.py update .
