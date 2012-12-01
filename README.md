@@ -10,9 +10,16 @@ It is currently in a very alpha release and it's here for my personal
 tracking. But of course I would be glad if someone wants to use it and
 improve on it.
 
+#### Development notes
+
+An NPM package.json file is provided for installing the dependencies of the asset compression tools.
+
+    $ cd /path/to/project/
+    $ npm install
+
 #### License
 
-Copyright 2011 Sebastián Ventura
+Copyright 2011-2012 Sebastián Ventura, José Moreira
 
 freelancehours is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,3 +36,4 @@ along with freelancehours.  If not, see <http://www.gnu.org/licenses/>.
 
 #### Contributors
 Sebastián Ventura
+José Moreira

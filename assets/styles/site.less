@@ -1,0 +1,115 @@
+/**
+ * Copyright 2012 Sebastian Ventura, Jose Moreira
+ * This file is part of freelancehours.
+ *
+ * freelancehours is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or* (at your option) any later version.
+ *
+ * frelancehours is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with freelancehours.	If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.drop-shadow(@params) {
+	-moz-box-shadow: @params;
+	-webkit-box-shadow: @params;
+	box-shadow: @params;
+}
+
+.rounded-bottom-corners(@params) {
+	-webkit-border-bottom-right-radius: @params;
+	-webkit-border-bottom-left-radius: @params;
+	-moz-border-radius-bottomright: @params;
+	-moz-border-radius-bottomleft: @params;
+	border-bottom-right-radius: @params;
+	border-bottom-left-radius: @params;
+}
+
+html {
+
+	padding-top: 60px;
+
+	#content {
+
+		#tasks {
+
+			.name {
+				font-weight: bold;
+				font-size: 18px;
+			}
+			td {
+				text-align: center;
+			}
+			.starter {
+				.btn;
+				.btn-success;
+			}
+			.stoper {
+				.btn;
+				.btn-warning;
+			}
+			.changer {
+			}
+			.deleter:hover {
+				opacity: 1;
+			}
+			.deleter {
+				.btn;
+				.btn-warning;
+			}
+		}
+	}
+}
+
+#dailyhours {
+	.drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.3));
+	.rounded-bottom-corners(4px);
+	padding: 10px;
+	text-align: center;
+
+	td {
+		font-size: 14px;
+		text-align: center;
+	}
+	table {
+		width: 100%;
+	}
+	.today {
+		font-size: 20px;
+	}
+}
+
+#task-form-section {
+
+	form#task-form {
+		.drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.2));
+		.rounded-bottom-corners(4px);
+		padding: 10px;
+		margin-bottom: 10px;
+
+		button.save {
+			.btn;
+			.btn-primary;
+		}
+	}
+
+	#error {
+		.alert;
+		.alert-error;
+		visibility: hidden;
+		display: none;
+	}
+}
+
+#task-list-section {
+	table#tasks {
+		.drop-shadow(1px 1px 10px 1px rgba(0, 0, 0, 0.2));
+		.rounded-bottom-corners(4px);
+	}
+
+}

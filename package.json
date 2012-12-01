@@ -1,0 +1,26 @@
+{
+	"name":"freelancehours",
+	"version":"0.0.0",
+	"description":"NPM dependencies for freelancehours",
+	"dependencies":{
+		"less":"*",
+		"uglify-js":"*"
+	},
+	"engines": {
+		"node": ">=0.6"
+	},
+	"author": {
+		"name" : "Sebastián Ventura",
+		"email" : "lomegor+freelancehours@gmail.com",
+		"url" : "http://lomegor.com"
+	},
+	"contributors": [{
+			"name": "José Moreira"
+		}, {
+			"name" : "Sebastián Ventura",
+			"email" : "lomegor+freelancehours@gmail.com",
+			"url" : "http://lomegor.com"
+		}],
+	"license":"GPLv3",
+	"readmeFilename":"README.md"
+}

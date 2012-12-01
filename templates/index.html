@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<!--
+ Copyright 2012 Sebastian Ventura, Jose Moreira
+ This file is part of freelancehours.
+
+ freelancehours is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ frelancehours is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with freelancehours.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Freelance Hours</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href='https://fonts.googleapis.com/css?family=Puritan|Shanti|Oswald' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/static/styles/main.css" type="text/css" media="screen">
+	<link rel="stylesheet"  href="/static/styles/main-responsive.css" media="screen">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+	<script src="/static/scripts/main.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<a class="brand" href="#">Freelancehours</a>
+			<ul class="nav pull-right">
+				<li class="dropdown">
+					<a id="nav-dropdown" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">{{ current_user }} <b class="caret"></b></a>
+					<ul aria-labelledby="nav-dropdown" role="menu" class="dropdown-menu">
+						<li><a href="{{ logout_url }}" tabindex="-1">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<!-- sidebar -->
+		<div class="span3">
+			<div id="dailyhours">
+				{% for v in daily %}
+				<table>
+					<tr>
+						<th>{{ v.0 }}</th>
+						<th class="total">{{ v.1 }}</th>
+					</tr>
+					{% for dh in v.2 %}
+					<tr>
+						<td class="day">{{ dh.day}}</td>
+						<td class='{{ dh.today }}'>{{ dh.hours }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+				<hr>
+				{% endfor %}
+			</div>
+		</div><!-- /. sidebar -->
+
+		<!-- content -->
+		<div id="content" class="span9">
+
+			<div id="task-form-section" class="row-fluid">
+				<form id="task-form">
+					<table class="table">
+						<tr>
+							<th>Project</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>&nbsp;</th>
+						</tr>
+						<tr>
+							<td>
+								<select id="project">
+									{% for p in projects %}
+									<option value="{{ p }}">{{ p }}</option>
+									{% endfor %}
+									<option value="all" selected>All</option>
+									<option value="new">New</option>
+								</select>
+								<input id="newproject" style="display:none" type="text" name="project">
+							</td>
+							<td>
+								<input id="newtask" type="text" name="name">
+							</td>
+							<td>
+								<input id="newdescr" type="text" name="name">
+							</td>
+							<td><button class="save" type="submit">Save</button></td>
+						</tr>
+					</table>
+				</form>
+				<div id="error"></div>
+			</div>
+
+			<div id="task-list-section" class="row-fluid">
+				<table id="tasks" class="table table-bordered table-striped">
+					<tr>
+						<th style="width: 10%;">&nbsp;</th>
+						<th style="width: 20%;">Task</th>
+						<th style="width: 20%;">Project</th>
+						<th style="width: 20%;">Description</th>
+						<th style="width: 20%;">Hours</th>
+						<th style="width: 10%;">&nbsp;</th>
+					</tr>
+					{% for jh in hours %}
+					<tr>
+						<td>
+							<button class="changer {{ jh.started }}er" type="button">{{jh.started}}</button>
+						</td>
+						<td class="name">{{ jh.name }}</td>
+						<td class="project">{{ jh.project }}</td>
+						<td class="descr">{{ jh.descr }}</td>
+						<td class="hour">{{ jh.hours }}</td>
+						<td>
+							<button class="deleter" type="button">Delete</button>
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+
+
+		</div><!-- /. content -->
+	</div><!-- /. row -->
+</div>
+
+
+</body>
+</html>
