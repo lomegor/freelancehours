@@ -58,12 +58,6 @@
 						<th>{{ v.0 }}</th>
 						<th class="total">{{ v.1 }}</th>
 					</tr>
-					{% for dh in v.2 %}
-					<tr>
-						<td class="day">{{ dh.day}}</td>
-						<td class='{{ dh.today }}'>{{ dh.hours }}</td>
-					</tr>
-					{% endfor %}
 				</table>
 				<hr>
 				{% endfor %}

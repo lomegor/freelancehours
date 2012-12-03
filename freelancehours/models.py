@@ -19,37 +19,7 @@ import datetime
 from google.appengine.ext import db
 
 class Counter(db.Model):
-    name = db.StringProperty()
     start = db.DateTimeProperty(auto_now=True)
-
-class DataDailyHours():
-    project = ''
-    day = ''
-    hours = ''
-    today = ''
-    def __init__(self,dh=None):
-        if dh:
-            self.project = dh.project.name
-            self.day = dh.day.isoformat()
-            if dh.day == datetime.date.today():
-                self.today = 'today'
-            self.hours = getHours(dh)
-
-class DataJobHours():
-    name = ''
-    hours = 0
-    descr = ''
-    project = ''
-    started = ''
-    def __init__(self,jh):
-        self.name = jh.name
-        self.hours = getHours(jh)
-        self.descr = jh.descr
-        self.project = jh.project.name
-        if jh.started==1:
-            self.started='stop'
-        else:
-            self.started='start'
 
 class Projects(db.Model):
     name = db.StringProperty()
@@ -60,15 +30,60 @@ class JobHours(db.Model):
     descr = db.StringProperty()
     project = db.ReferenceProperty(Projects)
     started = db.IntegerProperty()
+    counter = db.ReferenceProperty(Counter)
 
-class DailyHours(db.Model):
-    project = db.ReferenceProperty(Projects)
-    day = db.DateProperty()
-    hours = db.DateTimeProperty()
+    def start(self):
+        c = self.counter
+        new = False
+        if not c:
+            c = Counter()
+            new = True
+
+        c.start = datetime.datetime.now()
+        c.put()
+        if new:
+            self.counter = c.key()
+
+        self.started = 1
+        self.put()
+
+    def stop(self):
+        td = datetime.datetime.now() - self.counter.start
+        tmp = self.hours + td
+        self.hours = tmp.replace(microsecond = 0)
+        self.started = 0
+        self.put()
+
+    def restart(self):
+        self.stop()
+        self.start()
+
+    def getHours(self):
+        return getHours(self.hours)
+
+    def delete(self):
+        db.delete(self.counter.key())
+        db.delete(self.key())
+
+class DataJobHours():
+    name = ''
+    hours = 0
+    descr = ''
+    project = ''
+    started = ''
+    def __init__(self,jh):
+        self.name = jh.name
+        self.hours = jh.getHours()
+        self.descr = jh.descr
+        self.project = jh.project.name
+        if jh.started==1:
+            self.started='stop'
+        else:
+            self.started='start'
 
 
-def getHours(o):
-    td = o.hours - datetime.datetime.min
+def getHours(hours):
+    td = hours - datetime.datetime.min
     td = (td.microseconds + (td.seconds + td.days * 24 * 3600)\
           * 10**6) / 10**6
     h = int(td/3600)

@@ -36,12 +36,10 @@ $(document).ready(function() {
 		counting = 1;
 	});
 	totalCounter = $("#dailyhours .total");
-	todayCounter = $("#dailyhours .today");
 	setTimeout(countDay,1000);
 });
 
 var totalCounter;
-var todayCounter;
 var counting = 0;
 
 var newProject = 0;
@@ -73,7 +71,6 @@ function updateTime(e) {
 function countDay() {
 	if (counting) {
 		updateTime(totalCounter);
-		updateTime(todayCounter);
 	}
 	setTimeout(countDay,1000);
 }
@@ -88,10 +85,9 @@ function count(e,p,n) {
 };
 
 function start() {
-	$(".stoper").click();
 	$(this).removeClass("starter");
 	$(this).addClass("stoper");
-	$(this).text("Stop");
+	$(this).text("stop");
 	var $tr = $(this).parent().parent();
 	var $that = $(this);
 	var p = $tr.find(".project").text();
@@ -105,7 +101,7 @@ function start() {
 				error(data.data);
 				$that.removeClass("stoper");
 				$that.addClass("starter");
-				$that.text("Start");
+				$that.text("start");
 				return;
 			}
 			counting = 1;
@@ -120,7 +116,7 @@ function start() {
 function stop() {
 	$(this).removeClass("stoper");
 	$(this).addClass("starter");
-	$(this).text("Start");
+	$(this).text("start");
 	var $tr = $(this).parent().parent();
 	var $that = $(this);
 	var p = $tr.find(".project").text();
@@ -134,7 +130,7 @@ function stop() {
 				error(data.data);
 				$that.removeClass("starter");
 				$that.addClass("stoper");
-				$that.text("Stop");
+				$that.text("stop");
 				return;
 			}
 			h.text(data.data);
@@ -201,13 +197,13 @@ function newTask(evt) {
 				newProject = 0;
 			}
 			$("#tasks").append($("<tr>"+
-					"<td><button class=\"btn changer starter\" value=\"start\">Start</button></td>"+
+					"<td><button class=\"btn changer starter\" value=\"start\">start</button></td>"+
 					"<td class=\"name\">"+n+"</td>"+
 					"<td class=\"project\">"+p+"</td>"+
 					"<td class=\"descr\">"+d+"</td>"+
 					"<td class=\"hour\">"+data.data+"</td>"+
 					"<td><button class=\"btn deleter\" value=\"delete\">Delete</button></td>"+
-				"</tr>")).find('.starter').click();
+				"</tr>"));
 		}
 	);
 	return false;

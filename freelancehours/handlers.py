@@ -26,12 +26,10 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 
 from models import Counter
-from models import DailyHours
-from models import DataJobHours
-from models import DataDailyHours
 from models import getHours
 from models import Projects
 from models import JobHours
+from models import DataJobHours
 
 class MainPage(webapp2.RequestHandler):
 
@@ -40,46 +38,21 @@ class MainPage(webapp2.RequestHandler):
         projects = []
         dailyHours = dict()
 
-        cs = Counter.all()
-        for c in cs:
-            jh = JobHours.all().filter('name =',c.name).get()
-            td = datetime.datetime.now()-c.start
-            tmp = jh.hours + td
-
-            jh.hours = tmp.replace(microsecond = 0)
-            jh.put()
-
-            d = DailyHours.all().filter('day =',datetime.date.today())\
-            .filter('project =',jh.project.key()).get();
-            if not d:
-                d = DailyHours(project = jh.project.key(), day = datetime.date.today())
-                tmp = datetime.datetime.min + td
-            else:
-                tmp = d.hours + td
-            d.hours = tmp.replace(microsecond = 0)
-            d.put()
-
-            c.start = datetime.datetime.now()
-            c.put()
-
         for p in Projects.all():
-            dailyHours[p.name] = dict(total=datetime.datetime.min, hours=[])
+            dailyHours[p.name] = datetime.datetime.min
             projects.append(p.name)
 
         for j in JobHours.all():
+            if j.started:
+                j.restart()
             dataHours.append(DataJobHours(j))
             tmp = j.hours - datetime.datetime.min
-            dailyHours[j.project.name]['total'] += tmp
-
-        for d in DailyHours.all():
-            dailyHours[d.project.name]['hours'].append(DataDailyHours(d))
+            dailyHours[j.project.name] += tmp
 
         hoursArray = []
         for k,v in dailyHours.iteritems():
-            total = DataDailyHours()
-            total.hours = v['total']
-            v['total'] = getHours(total)
-            hoursArray.append([k,v['total'],v['hours']])
+            v = getHours(v)
+            hoursArray.append([k,v])
 
         template_values = {
             'projects':projects,
@@ -113,61 +86,23 @@ class API(webapp2.RequestHandler):
                 new = True
 
             method = self.request.get('method')
-            if method == 'update':
-                hours = self.request.get('hours')
-                jh.hours = hours
-                jh.put()
-                Respond(self,0,"");
-            elif method == 'delete':
-                c = Counter.all().filter('name =',n)
-                for c1 in c:
-                    db.delete(c1.key())
-                db.delete(jh.key())
+            if method == 'delete':
+                jh.delete()
                 Respond(self,0,"");
             elif method == 'start':
-                c = Counter.all().filter('name =',n)
-                for c1 in c:
-                    db.delete(c1.key())
-                c = Counter()
-                c.name = n
-                c.put()
-                jh = JobHours.all().filter('name =',n).get()
-                jh.started=1
-                jh.put()
+                jh.start()
                 Respond(self,0,"");
             elif method == 'stop':
-                c = Counter.all().filter('name =',n).get()
-                if c!=None:
-                    jh = JobHours.all().filter('name =',n).get()
-                    jh.started=0
-                    td = datetime.datetime.now()-c.start
-                    tmp = jh.hours + td
-
-                    jh.hours = tmp.replace(microsecond = 0)
-                    jh.put()
-
-                    d = DailyHours.all().filter('day =',datetime.date.today())\
-                    .filter('project =',jh.project.key()).get();
-                    if not d:
-                        d = DailyHours(project = jh.project.key(), day = datetime.date.today())
-                        tmp = datetime.datetime.min + td
-                    else:
-                        tmp = d.hours + td
-                    d.hours = tmp.replace(microsecond = 0)
-                    d.put()
-
-                    c = Counter.all().filter('name =',n)
-                    for c1 in c:
-                        db.delete(c1.key())
-                    Respond(self,0,getHours(jh))
+                jh.stop()
+                Respond(self,0,jh.getHours())
             elif new:
-                Respond(self,0,getHours(jh))
+                Respond(self,0,jh.getHours())
             else:
                 Respond(self,1,"Task already exists!");
         except:
             Respond(self,1,"Unexpected error!")
             logging.exception("Error")
 
-
 def Respond(req, error, msg):
     req.response.out.write("{\"error\":"+str(error)+",\"data\":\""+str(msg)+"\"}")
+

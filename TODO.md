@@ -11,9 +11,7 @@ Features
 
 Bugs
 ----
-* Fix or totally remove counting of days, tends to count more days, and fills the database with useless data mostly
 * New way to create clients
-* Sometimes when creating a new task, all other tasks start
 
 Improvements
 ------------
