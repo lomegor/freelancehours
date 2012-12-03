@@ -1,6 +1,8 @@
 # Makefile for this site
 #
 #
+OUTSTYLES="./static/styles"
+OUTSCRIPTS="./static/scripts"
 LESSC="./node_modules/less/bin/lessc"
 UGLIFY="./node_modules/uglify-js/bin/uglifyjs"
 
@@ -13,15 +15,17 @@ BOOTSTRAP_FILES=vendor/bootstrap/js/bootstrap-transition.js vendor/bootstrap/js/
 
 # Compile assets for development
 assets-compile:
-	${LESSC} assets/styles/main.less > static/styles/main.css
-	${LESSC} assets/styles/main-responsive.less > static/styles/main-responsive.css
-	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js -b > static/scripts/main.js
+	mkdir -p ${OUTSTYLES} ${OUTSCRIPTS}
+	${LESSC} assets/styles/main.less > ${OUTSTYLES}/main.css
+	${LESSC} assets/styles/main-responsive.less > ${OUTSTYLES}/main-responsive.css
+	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js -b > ${OUTSCRIPTS}/main.js
 
 # Compile and compresss assets for deployment
 assets-compress:
-	${LESSC} --compress assets/styles/main.less > static/styles/main.css
-	${LESSC} --compress assets/styles/main-responsive.less > static/styles/main-responsive.css
-	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js > static/scripts/main.js
+	mkdir -p ${OUTSTYLES} ${OUTSCRIPTS}
+	${LESSC} --compress assets/styles/main.less > ${OUTSTYLES}/main.css
+	${LESSC} --compress assets/styles/main-responsive.less > ${OUTSTYLES}/main-responsive.css
+	${UGLIFY} ${BOOTSTRAP_FILES} assets/scripts/main.js > ${OUTSCRIPTS}/main.js
 
 deploy: assets-compress
 	appcfg.py update .
